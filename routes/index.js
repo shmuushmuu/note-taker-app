@@ -1,8 +1,7 @@
 const router = require('express').Router();
 const path = require('path');
-const notesRouter = require('./tipsRouter');
-router.use(feedbackRouter);
-router.use(tipsRouter);
+const notesRouter = require('./notesRouter');
+router.use(notesRouter);
 
 // GET Route for homepage
 router.get('/', (req, res) =>
