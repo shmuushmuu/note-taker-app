@@ -1,6 +1,6 @@
 const express = require('express');
 const fs = require("fs");
-const { parse } = require('path');
+// const { parse } = require('path');
 const path = require('path');
 const { v4: uuid } = require('uuid');
 
@@ -18,12 +18,12 @@ app.get('/', (req, res) => {
  // res.send('Note Taker');
 });
 
-app.get('/notes', (req, res) => {
+app.get('/notes.html', (req, res) => {
   res.sendFile(path).join(__dirname, './public/notes.html')
 })
 
 app.get('/api/notes', (req, res) => {
-  fs.readFileSync('./db/db.json', 'utf8');
+  const data = fs.readFileSync('./db/db.json', 'utf8');
   const notes = JSON.parse(data);
   res.json(notes);
 })
