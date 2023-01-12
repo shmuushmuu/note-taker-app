@@ -36,8 +36,17 @@ app.post('/api/notes', (req, res) => {
     id: uuid4()
   };
   notes.push(newNote);
-  fs.writeFileSync('/db/db.json', 'utf8');
+  const jsonNotes = json.stringify(notes, null, 2);
+  fs.writeFileSync('/db/db.json', jsonNotes);
   res.json(notes);
+})
+
+app.delete('/api/notes/:id', (req, res) => {
+  const data = fs.readFileSync('./db/db.json', 'utf8');
+  const notes = json.parse(data).filter(note => note.id !=== req.params.id);
+  const jsonNotes = json.stringify(notes, null, 2);
+  fs.writeFileSync('./db/db.json', jsonNotes);
+  res.json('note has been deleted!');
 })
 
 app.listen(PORT, () =>
