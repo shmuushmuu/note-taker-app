@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require("fs");
 // const { parse } = require('path');
 const path = require('path');
-const { v4: uuid } = require('uuid');
+const { v4: uuid4 } = require('uuid');
 
 //.env.PORT is for Heroku to help it work when deployed
 const PORT = process.env.PORT || 3001;
@@ -18,18 +18,18 @@ app.get('/', (req, res) => {
  // res.send('Note Taker');
 });
 
-app.get('/notes.html', (req, res) => {
-  res.sendFile(path).join(__dirname, './public/notes.html')
+app.get('/notes', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/notes.html'));
 })
 
 app.get('/api/notes', (req, res) => {
-  const data = fs.readFileSync('./db/db.json', 'utf8');
+  const data = fs.readFileSync('./db/notes.json', 'utf8');
   const notes = JSON.parse(data);
   res.json(notes);
 })
 
 app.post('/api/notes', (req, res) => {
-  fs.readFileSync('./db/db.json', 'utf8');
+  fs.readFileSync('./db/notes.json', 'utf8');
   const notes = JSON.parse(data);
   const newNote = {
     ...req.body,
@@ -37,15 +37,15 @@ app.post('/api/notes', (req, res) => {
   };
   notes.push(newNote);
   const jsonNotes = json.stringify(notes, null, 2);
-  fs.writeFileSync('/db/db.json', jsonNotes);
+  fs.writeFileSync('./db/notes.json', jsonNotes);
   res.json(notes);
 })
 
 app.delete('/api/notes/:id', (req, res) => {
-  const data = fs.readFileSync('./db/db.json', 'utf8');
+  const data = fs.readFileSync('./db/notes.json', 'utf8');
   const notes = json.parse(data).filter(note => note.id !== req.params.id);
   const jsonNotes = json.stringify(notes, null, 2);
-  fs.writeFileSync('./db/db.json', jsonNotes);
+  fs.writeFileSync('./db/notes.json', jsonNotes);
   res.json('note has been deleted!');
 })
 
