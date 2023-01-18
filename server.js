@@ -1,6 +1,5 @@
 const express = require('express');
 const fs = require("fs");
-// const { parse } = require('path');
 const path = require('path');
 const { v4: uuid4 } = require('uuid');
 
@@ -10,7 +9,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
@@ -36,15 +35,15 @@ app.post('/api/notes', (req, res) => {
     id: uuid4()
   };
   notes.push(newNote);
-  const jsonNotes = json.stringify(notes, null, 2);
+  const jsonNotes = JSON.stringify(notes, null, 2);
   fs.writeFileSync('./db/notes.json', jsonNotes);
-  res.json(notes);
+  res.json('This has been saved!');
 })
 
 app.delete('/api/notes/:id', (req, res) => {
   const data = fs.readFileSync('./db/notes.json', 'utf8');
-  const notes = json.parse(data).filter(note => note.id !== req.params.id);
-  const jsonNotes = json.stringify(notes, null, 2);
+  const notes = JSON.parse(data).filter(note => note.id !== req.params.id);
+  const jsonNotes = JSON.stringify(notes, null, 2);
   fs.writeFileSync('./db/notes.json', jsonNotes);
   res.json('note has been deleted!');
 })
